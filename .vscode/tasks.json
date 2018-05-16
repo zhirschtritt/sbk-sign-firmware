@@ -1,0 +1,34 @@
+{ 
+  "version": "0.1.0", 
+  "command": "po", 
+  "isShellCommand": true, 
+  "args": [], 
+  "showOutput": "always", 
+  "echoCommand": true, 
+  "tasks": [ 
+      { 
+          "taskName": "compile", 
+          "suppressTaskName": true, 
+          "isBuildCommand": true,            
+          "args": ["photon", "build"], 
+          "problemMatcher": { 
+              "owner": "cpp", 
+              "fileLocation": ["relative", "${workspaceRoot}"], 
+              "pattern": { 
+                  "regexp": "^(.*?):(\\d+):(\\d+):\\s+(warning|error|fatal error):\\s+(.*)$", 
+                  "file": 1, 
+                  "line": 2, 
+                  "column": 3, 
+                  "severity": 4, 
+                  "message": 5 
+              }, 
+              "severity":"error" 
+          } 
+  },         { 
+          "taskName": "flash",             
+          "suppressTaskName": true, 
+          "isTestCommand": false,
+          "args": ["photon", "dfu"] 
+      }    
+  ]     
+} 
