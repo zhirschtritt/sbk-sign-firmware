@@ -18,15 +18,16 @@ Color colors[3] = {red, green, blue};
 retained bool ledState = false;
 int toggleOff();
 int toggleOn();
-int toggleLED(String command);
+int toggleLED(const char *event, const char *data);
 
 void setup(){
-  Particle.function("toggleLights", toggleLED);
+  Particle.subscribe("sbkSign/toggleLight", toggleLED, MY_DEVICES);
+  Particle.variable("lightState", ledState);
 }
 
 void loop(){}
 
-int toggleLED(String command) {
+int toggleLED(const char *event, const char *data) {
   if (ledState) {
     if (toggleOff()) ledState = false;
     return 1;

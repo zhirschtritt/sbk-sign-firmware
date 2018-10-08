@@ -1,2 +1,4 @@
 bin/*
 *.bin
+client/node_modules
+client/www
