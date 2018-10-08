@@ -4,8 +4,8 @@
 using namespace RGBControls;
 
 #define REDPIN D0
-#define GREENPIN D1
-#define BLUEPIN D2
+#define GREENPIN D2
+#define BLUEPIN D1
 
 Led led(REDPIN, GREENPIN, BLUEPIN);
 
@@ -20,12 +20,20 @@ int toggleOff();
 int toggleOn();
 int toggleLED(const char *event, const char *data);
 
+int fadeState = 0;
+
 void setup(){
   Particle.subscribe("sbkSign/toggleLight", toggleLED, MY_DEVICES);
   Particle.variable("lightState", ledState);
 }
 
-void loop(){}
+void loop(){
+  if (fadeState == 0) {
+    led.off();
+  } else if (fadeState == 1) {
+    led.fade(colors, 3, 3000);
+  }
+}
 
 int toggleLED(const char *event, const char *data) {
   if (ledState) {
@@ -38,11 +46,13 @@ int toggleLED(const char *event, const char *data) {
 }
 
 int toggleOn(){
-  led.fade(colors, 3, 3000);
+  fadeState = 1;
+  Particle.publish("sbkSign/lightState","on", 60, PRIVATE);
   return 1;
 }
 
 int toggleOff(){
-  led.off();
+  fadeState = 0;
+  Particle.publish("sbkSign/lightState", "off", 60, PRIVATE);
   return 1;
 }
