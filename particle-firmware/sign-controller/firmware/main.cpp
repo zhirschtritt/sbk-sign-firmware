@@ -15,12 +15,13 @@ Color blue(0, 0, 255);
 
 Color colors[3] = {red, green, blue};
 
-retained bool signLedsOn = false;
+bool signLedsOn = false;
 int toggleOff();
 int toggleOn();
 int toggleSignLeds(const char *event, const char *data);
 
-void setup(){
+void setup()
+  Particle.publish("sbkSign/lightState", "off", 60, PRIVATE);
   Particle.subscribe("sbkSign/toggleLight", toggleSignLeds, MY_DEVICES);
   Particle.variable("lightState", signLedsOn);
 }
@@ -35,20 +36,22 @@ void loop(){
 
 int toggleSignLeds(const char *event, const char *data) {
   if (signLedsOn) {
-    if (toggleOff()) signLedsOn = false;
+    toggleOff();
     return 1;
   } else {
-    if (toggleOn()) signLedsOn = true;
+    toggleOn();
     return 1;
   }
 }
 
 int toggleOn(){
+  signLedsOn = true;
   Particle.publish("sbkSign/lightState","on", 60, PRIVATE);
   return 1;
 }
 
 int toggleOff(){
+  signLedsOn = false;
   Particle.publish("sbkSign/lightState", "off", 60, PRIVATE);
   return 1;
 }
